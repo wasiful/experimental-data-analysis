@@ -1,20 +1,22 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy.optimize import curve_fit
 
 # Data for longitudinal field
 I_longitudinal = np.array([4.25, 4.55, 4.85, 5.00, 5.25, 5.40, 4.75])
 U_longitudinal = np.array([750, 850, 950, 1050, 1150, 1250, 900])
-I2_longitudinal = I_longitudinal ** 2
+I2_longitudinal = I_longitudinal**2
 
 # Data for transverse field
 I_transverse = np.array([1.4, 1.3, 1.2, 1.15, 1.05, 0.85, 0.95, 1.1])
 U_transverse = np.array([220, 200, 180, 160, 130, 100, 110, 146])
-I2_transverse = I_transverse ** 2
+I2_transverse = I_transverse**2
+
 
 # Define linear function for fitting
 def linear_fit(I2, a):
     return a * I2
+
 
 # Fit the longitudinal data
 popt_long, pcov_long = curve_fit(linear_fit, I2_longitudinal, U_longitudinal)
@@ -38,19 +40,23 @@ print(f"Transverse field: e/me = {e_me_trans:.2f} C/kg, error = {error_trans:.2f
 plt.figure(figsize=(12, 6))
 
 plt.subplot(1, 2, 1)
-plt.scatter(I2_longitudinal, U_longitudinal, label='Data')
-plt.plot(I2_longitudinal, linear_fit(I2_longitudinal, *popt_long), color='red', label='Fit')
-plt.xlabel('$I^2$ (A$^2$)')
-plt.ylabel('U (V)')
-plt.title('Longitudinal Magnetic Field')
+plt.scatter(I2_longitudinal, U_longitudinal, label="Data")
+plt.plot(
+    I2_longitudinal, linear_fit(I2_longitudinal, *popt_long), color="red", label="Fit"
+)
+plt.xlabel("$I^2$ (A$^2$)")
+plt.ylabel("U (V)")
+plt.title("Longitudinal Magnetic Field")
 plt.legend()
 
 plt.subplot(1, 2, 2)
-plt.scatter(I2_transverse, U_transverse, label='Data')
-plt.plot(I2_transverse, linear_fit(I2_transverse, *popt_trans), color='red', label='Fit')
-plt.xlabel('$I^2$ (A$^2$)')
-plt.ylabel('U (V)')
-plt.title('Transverse Magnetic Field')
+plt.scatter(I2_transverse, U_transverse, label="Data")
+plt.plot(
+    I2_transverse, linear_fit(I2_transverse, *popt_trans), color="red", label="Fit"
+)
+plt.xlabel("$I^2$ (A$^2$)")
+plt.ylabel("U (V)")
+plt.title("Transverse Magnetic Field")
 plt.legend()
 
 plt.tight_layout()
