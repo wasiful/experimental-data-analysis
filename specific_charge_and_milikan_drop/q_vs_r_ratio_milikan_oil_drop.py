@@ -6,10 +6,10 @@ from scipy.optimize import curve_fit
 
 # Given constants
 eta = 1.8e-5  # Pa·s
-rho_oil = 886  # kg/m³
+rho_oil = 874  # kg/m³
 rho_air = 1.225  # kg/m³
 g = 9.81  # m/s²
-d = 0.099  # m
+d = 0.006  # m
 A = (6.18e-5) / 0.765  # m
 
 # Data from the table
@@ -85,41 +85,49 @@ v_k = distance / t_fall
 v_s = distance / t_rise
 
 # Calculate radius r
-r = np.sqrt((9 * eta * v_k) / (2 * g * (rho_oil - rho_air)))
+r = np.sqrt((9 * eta * v_k/100) / (2 * g * (rho_oil - rho_air)))
 
 # Calculate f_c
 f_c = 1 + (A / r)
 
 # Calculate charge Q
-Q = (d / U) * (6 * np.pi * eta * (f_c ** (3 / 2)) * (v_k + v_s) * r)
+Q = (d / U) * ((6 * np.pi * eta * (v_k/100 + v_s/100) * r)/ (f_c ** (3 / 2)))
+print(f"Q={Q}")
+print(f"Average Charge of the electron ={np.mean(Q)}" )
 
 # Calculate standard error for Q
 Q_err = Q * np.sqrt(
-    (0.002 / d) ** 2 + (0.01 / U) ** 2 + (0.01 / v_k) ** 2 + (0.01 / v_s) ** 2
+    (0.002 / d) ** 2 + (0.01 / U) ** 2 + (0.01 / v_k) ** 2 + (0.01 /v_s) ** 2
 )
-print(Q_err)
-average_q_err = statistics.mean(
-    [
-        6.35732935e-13,
-        4.99513741e-13,
-        4.70736851e-13,
-        4.63792630e-13,
-        4.42424600e-13,
-        4.36789368e-13,
-        5.09658196e-13,
-        6.21172130e-13,
-        4.83092764e-13,
-        5.91234097e-13,
-        1.11768263e-12,
-        4.74089988e-13,
-        4.24727271e-13,
-        4.62213908e-13,
-        4.85227643e-13,
-        6.62411620e-13,
-        4.43226030e-13,
-    ]
-)
-print(average_q_err)
+print(f"the average error is = {np.mean(Q_err)} ")
+
+# average_q_err = statistics.mean(
+#     [
+#         6.35732935e-13,
+#         4.99513741e-13,
+#         4.70736851e-13,
+#         4.63792630e-13,
+#         4.42424600e-13,
+#         4.36789368e-13,
+#         5.09658196e-13,
+#         6.21172130e-13,
+#         4.83092764e-13,
+#         5.91234097e-13,
+#         1.11768263e-12,
+#         4.74089988e-13,
+#         4.24727271e-13,
+#         4.62213908e-13,
+#         4.85227643e-13,
+#         6.62411620e-13,
+#         4.43226030e-13,
+#     ]
+# )
+# print(f"average error is ={average_q_err}")
+
+average_specific_charge = np.mean([2.88 * 10**11, 1.60* 10**11])
+print (f"average specific charge is = {average_specific_charge}")
+#2.24*10**11
+print (f"average mass of the electron = {np.mean(Q) / average_specific_charge}")
 
 
 # Linear fit function
